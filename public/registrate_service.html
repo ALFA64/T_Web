@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrate service</title>
+</head>
+<body>
+    <header style="background-color: f3f3f3;">
+        <a href="index.html">Back to Home</a>
+        <h1>Submit Your Auto Service Business</h1>
+        <p>Join our platform and connerct with customers in your area</p>
+    </header>
+    <!-- Registration form -->
+    <form action="/registrate_service.php" method="POST">
+    <div class="info-container">
+        <h2>Business Information</h2>
+        <table >
+            <tr>
+                <td>
+                    <label for="bussines_name">Business Name *</label><br>
+                    <input type="text" id="bussines_name" name="bussines_name" placeholder="e.g. Quick Lube Auto Center">
+                </td>
+                <td>
+                    <label for="manager">Owner/Manager Name *</label><br>
+                    <input type="text" id="manager" name="manager" placeholder="Your full name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="email">Email Address *</label><br>
+                    <input type="email" id="email" name="email" placeholder="contact@bussiness.com">
+                </td>
+                <td>
+                    <label for="phone_number">Phone Number *</label><br>
+                    <input type="tel" id="phone_number" name="phone_number" placeholder="(555) 123-45-453">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label for="address">Bussiness Address *</label><br>
+                    <input type="text" id="address" name="addresss" placeholder="str. Petricani 6">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="city">City *</label><br>
+                    <input type="text" id="city" name="city" placeholder="Chisinau">
+                </td>
+                <td>
+                    <label for="Year in Business">Years in Business *</label><br>
+                    <input type="number" id="fyear" name="fyear" placeholder="e.g. 10">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                <label for="describe-bussiness">Business Description *</label><br>
+                <input type="text" id="describe-bussiness" name="describe-bussiness">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h2>Services Offered *</h2>
+        <p>Select all services your business provides:</p>
+        <label><input type="checkbox">Oil Change</label><br>
+        <label><input type="checkbox">Tire Service</label><br>
+        <label><input type="checkbox">Transmission</label><br>
+        <label><input type="checkbox">Battery Service</label><br>
+        <label><input type="checkbox">Detailing</label><br>
+        <label><input type="checkbox">Brake Service</label><br>
+        <label><input type="checkbox">Engine Repair</label><br>
+        <label><input type="checkbox">Air Conditioning</label><br>
+        <label><input type="checkbox">Inspection</label><br>
+        <label><input type="checkbox">Other</label>
+    </div>
+    <div>
+        <h2>Category of transports</h2>
+        <p>Select all the transport categories you can service</p>
+        <label><input type="checkbox">Motorcycles (A1-A)</label><br>
+        <label><input type="checkbox">Car (B1-B,BE)</label><br>
+        <label><input type="checkbox">Truck (C1-C,C1E-CE)</label><br>
+        <label><input type="checkbox">Minibus</label><br>
+        <label><input type="checkbox">Bus</label><br>
+        <label><input type="checkbox">Tractor</label><br>
+        <label><input type="checkbox">Special Transport</label><br>
+        <label><input type="checkbox">Other</label>
+    </div>
+    <div>
+        <h2>Certifications</h2>
+        <p><input type="checkbox">My business has ASE or equivalent certifications</p>
+        <div id="drop-zone">
+            <img href="">
+            <h3>Upload certification documents (optional)</h3><br>
+            <p>PDF, JPG, PNG up to 10 MB</p><br>
+            <button type="button">Choose Files</button>
+        </div>
+    </div>
+    <div>
+        <h2>Terms and Conditions</h2>
+        <div class="legacy">
+        <p>By submitting the form, you agree to the following terms:</p>
+        <ul>
+            <li>All information provided is accurate and up-to-date</li>
+            <li>You have the authority to register this business</li>
+            <li>You will maintain quality service standards</li>
+            <li>You agree to our platform's terms of service</li>
+            <li>You consent to customer reviews and ratings</li>
+        </ul>
+        <p>Search Service Auto reserves the right to verify all information and reject application that don't meet our standards.</p>
+        </div>
+        <label><input type="checkbox">I agree to the tearms and conditions *</label>
+    </div>
+    </form>
+
+    <button type="submit">Registrate/Send</button>
+    <footer>© Godoroja Ştefan</footer>
+</body>
+</html>
