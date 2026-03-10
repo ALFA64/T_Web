@@ -1,0 +1,210 @@
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#f6f6f6;
+margin:0;
+padding:40px;
+color:#333;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+.back{
+text-decoration:none;
+color:#333;
+display:inline-block;
+margin-bottom:25px;
+}
+
+/* MAIN LAYOUT */
+
+.layout{
+display:grid;
+grid-template-columns: 2fr 1fr;
+gap:40px;
+}
+
+/* IMAGE */
+
+.image-section img{
+width:100%;
+border-radius:12px;
+}
+
+/* TITLE */
+
+h1{
+margin-top:20px;
+margin-bottom:10px;
+}
+
+.info{
+color:#666;
+margin-bottom:20px;
+}
+
+.info span{
+margin-right:20px;
+}
+
+/* CARDS */
+
+.card{
+background:white;
+padding:25px;
+border-radius:12px;
+margin-bottom:25px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card h2{
+margin-top:0;
+}
+
+/* STEPS */
+
+.steps{
+list-style:none;
+padding:0;
+}
+
+.steps li{
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.steps span{
+width:24px;
+height:24px;
+background:#e6efff;
+color:#2a63ff;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:relative;
+}
+
+.service-card{
+position:sticky;
+top:20px;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+height:fit-content;
+}
+
+.service-card h3{
+margin-top:0;
+margin-bottom:20px;
+}
+
+.detail{
+margin-bottom:15px;
+}
+
+.detail span{
+display:block;
+font-size:13px;
+color:#777;
+}
+
+.price{
+color:#2563eb;
+font-size:20px;
+}
+
+/* PROVIDERS */
+
+.section-title{
+margin-top:30px;
+margin-bottom:20px;
+}
+
+.providers{
+display:flex;
+gap:25px;
+flex-wrap:wrap;
+}
+
+.provider-card{
+width:300px;
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.provider-card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.provider-info{
+padding:20px;
+}
+
+.provider-info h3{
+margin-top:0;
+margin-bottom:10px;
+}
+
+.rating{
+font-size:14px;
+margin-bottom:6px;
+}
+
+.rating span{
+color:#777;
+}
+
+.location{
+font-size:14px;
+color:#777;
+margin-bottom:15px;
+}
+
+.btn{
+display:block;
+text-align:center;
+padding:10px;
+background:#050520;
+color:white;
+border-radius:6px;
+text-decoration:none;
+}
+
+.btn:hover{
+background:#0b0b40;
+}
+
+/* RESPONSIVE */
+
+@media (max-width:900px){
+
+.layout{
+grid-template-columns:1fr;
+}
+
+.service-card{
+position:relative;
+top:0;
+}
+
+.providers{
+justify-content:center;
+}
+
+}
