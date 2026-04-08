@@ -7,6 +7,77 @@
     <title>Engine Diagnostic</title>
     <link rel="stylesheet" href="../css/about_style.css">
 </head>
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        /* -------------------------
+        ANIMATE PROVIDER CARDS
+        ------------------------- */
+
+        const cards = document.querySelectorAll(".provider-card");
+
+        cards.forEach((card, i) => {
+
+            card.style.opacity = "0";
+            card.style.transform = "translateY(30px)";
+
+            setTimeout(() => {
+
+                card.style.transition = "0.5s";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+
+            }, i * 200);
+
+        });
+
+
+        /* -------------------------
+        FAVORITE SERVICE
+        ------------------------- */
+
+        const title = document.querySelector("h1");
+
+        const favBtn = document.createElement("button");
+        favBtn.innerText = "⭐ Save Service";
+        favBtn.style.marginLeft = "10px";
+
+        title.appendChild(favBtn);
+
+        favBtn.addEventListener("click", () => {
+
+            localStorage.setItem("favoriteService", "Engine Diagnostic");
+
+            alert("Service saved to favorites");
+
+        });
+
+        /* -------------------------
+        HOVER EFFECT
+        ------------------------- */
+
+        cards.forEach(card => {
+
+            card.addEventListener("mouseenter", () => {
+
+                card.style.transform = "scale(1.03)";
+                card.style.transition = "0.2s";
+
+            });
+
+            card.addEventListener("mouseleave", () => {
+
+                card.style.transform = "scale(1)";
+
+            });
+
+        });
+
+    });
+
+</script>
+
 
 <body>
     <div class="container">

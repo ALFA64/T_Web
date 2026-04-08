@@ -7,6 +7,213 @@
     <link rel="stylesheet" href="../css/regis_style.css">
     <title>Registrate service</title>
 </head>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const form = document.querySelector("form");
+
+    /* =========================
+       VALIDARE
+    ========================= */
+
+    function showError(input, message) {
+        input.classList.add("error");
+
+        let msg = input.parentNode.querySelector(".error-message");
+
+        if (!msg) {
+            msg = document.createElement("div");
+            msg.className = "error-message";
+            input.parentNode.appendChild(msg);
+        }
+
+        msg.textContent = message;
+    }
+
+    function clearError(input) {
+        input.classList.remove("error");
+
+        const msg = input.parentNode.querySelector(".error-message");
+        if (msg) msg.remove();
+    }
+
+    function validateInput(input) {
+        if (input.value.trim() === "") {
+            showError(input, "This field is required");
+            return false;
+        }
+        clearError(input);
+        return true;
+    }
+
+    function validateEmail(input) {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!pattern.test(input.value)) {
+            showError(input, "Enter a valid email (example@mail.com)");
+            return false;
+        }
+
+        clearError(input);
+        return true;
+    }
+
+    function validatePhone(input) {
+        const pattern = /^[0-9+\-\s()]{7,20}$/;
+
+        if (!pattern.test(input.value)) {
+            showError(input, "Enter a valid phone (e.g. +373 60000000)");
+            return false;
+        }
+
+        clearError(input);
+        return true;
+    }
+
+    /* LIVE VALIDATION */
+    document.querySelectorAll("input").forEach(input => {
+        input.addEventListener("blur", () => validateInput(input));
+    });
+
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone_number");
+
+    email.addEventListener("blur", () => validateEmail(email));
+    phone.addEventListener("blur", () => validatePhone(phone));
+
+    /* =========================
+       FILE UPLOAD
+    ========================= */
+
+    const dropZone = document.getElementById("drop-zone");
+    const fileInput = document.getElementById("fileInput");
+    const chooseBtn = document.getElementById("chooseBtn");
+    const preview = document.getElementById("preview");
+
+    chooseBtn.onclick = () => fileInput.click();
+
+    fileInput.addEventListener("change", () => {
+        showFiles(fileInput.files);
+    });
+
+    dropZone.addEventListener("dragover", e => {
+        e.preventDefault();
+        dropZone.style.border = "2px dashed #2563eb";
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.style.border = "";
+    });
+
+    dropZone.addEventListener("drop", e => {
+        e.preventDefault();
+        dropZone.style.border = "";
+
+        const files = e.dataTransfer.files;
+        const dt = new DataTransfer();
+
+        for (let file of files) {
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert(file.name + " is larger than 10MB");
+                continue;
+            }
+
+            dt.items.add(file);
+        }
+
+        fileInput.files = dt.files;
+        showFiles(fileInput.files);
+    });
+
+    function showFiles(files) {
+        preview.innerHTML = "";
+
+        for (let file of files) {
+            const div = document.createElement("div");
+            div.textContent =
+                file.name + " (" + (file.size / 1024 / 1024).toFixed(2) + " MB)";
+            preview.appendChild(div);
+        }
+    }
+
+    /* =========================
+       SUBMIT
+    ========================= */
+
+    form.addEventListener("submit", e => {
+
+        let valid = true;
+        let firstError = null;
+
+        const requiredFields = [
+            "bussines_name",
+            "manager",
+            "email",
+            "phone_number",
+            "address",
+            "city",
+            "fyear"
+        ];
+
+        requiredFields.forEach(id => {
+            const input = document.getElementById(id);
+
+            if (!validateInput(input)) {
+                valid = false;
+                if (!firstError) firstError = input;
+            }
+        });
+
+        if (!validateEmail(email)) {
+            valid = false;
+            if (!firstError) firstError = email;
+        }
+
+        if (!validatePhone(phone)) {
+            valid = false;
+            if (!firstError) firstError = phone;
+        }
+
+        /* SERVICES */
+        const serviceCheckboxes = document.querySelectorAll("div:nth-of-type(2) input[type=checkbox]");
+        let serviceSelected = false;
+
+        serviceCheckboxes.forEach(cb => {
+            if (cb.checked) serviceSelected = true;
+        });
+
+        if (!serviceSelected) {
+            alert("❌ Please select at least one service");
+            valid = false;
+        }
+
+        /* TERMS */
+        const terms = document.getElementById("terms");
+
+        if (!terms.checked) {
+            alert("❌ You must accept Terms and Conditions");
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+                firstError.focus();
+            }
+
+            alert("⚠️ Please fix the highlighted fields.");
+            return;
+        }
+
+        alert("✅ Form submitted successfully!");
+
+    });
+
+});
+</script>
 
 <body>
     <header style="background-color: f3f3f3;">
@@ -92,12 +299,23 @@
         </div>
         <div>
             <h2>Certifications</h2>
-            <p><input type="checkbox">My business has ASE or equivalent certifications</p>
+
+            <p>
+                <input type="checkbox" id="certified">
+                My business has ASE or equivalent certifications
+            </p>
+
             <div id="drop-zone">
-                <img href="">
-                <h3>Upload certification documents (optional)</h3><br>
-                <p>PDF, JPG, PNG up to 10 MB</p><br>
-                <button type="button">Choose Files</button>
+                <h3>Upload certification documents (optional)</h3>
+                <p>PDF, JPG, PNG up to 10 MB</p>
+
+                <!-- 🔥 INPUT REAL -->
+                <input type="file" id="fileInput" name="files[]" multiple hidden>
+
+                <button type="button" id="chooseBtn">Choose Files</button>
+
+                <!-- preview -->
+                <div id="preview"></div>
             </div>
         </div>
         <div>
@@ -114,10 +332,11 @@
                 <p>Search Service Auto reserves the right to verify all information and reject application that don't
                     meet our standards.</p>
             </div>
-            <label><input type="checkbox">I agree to the tearms and conditions *</label>
+            <label><input type="checkbox" id="terms">I agree to the tearms and conditions *</label>
         </div>
+        <button type="submit">Registrate/Send</button>
     </form>
-    <button type="submit">Registrate/Send</button>
+
     <footer>© Godoroja Ştefan</footer>
 </body>
 

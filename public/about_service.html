@@ -8,6 +8,182 @@
   <link rel="stylesheet" href="../css/about_service_style.css">
 </head>
 
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    /* ----------------------
+    CONTACT PROVIDER POPUP
+    ---------------------- */
+
+    const contactBtn = document.querySelector(".btn");
+
+    const popup = document.createElement("div");
+
+    popup.innerHTML = `
+<div id="contactPopup" class="popup">
+<div class="popup-content">
+<h3>Contact Provider</h3>
+
+<input type="text" id="name" placeholder="Your Name"><br>
+<input type="email" id="email" placeholder="Your Email"><br>
+<textarea id="message" placeholder="Your Message"></textarea><br>
+
+<button id="sendMessage">Send</button> <button id="closePopup">Close</button>
+
+</div>
+</div>
+`;
+
+    document.body.appendChild(popup);
+
+    contactBtn.onclick = () => {
+      document.getElementById("contactPopup").style.display = "flex";
+    };
+
+    document.addEventListener("click", (e) => {
+
+      if (e.target.id === "closePopup") {
+        document.getElementById("contactPopup").style.display = "none";
+      }
+
+    });
+
+    /* ----------------------
+    SEND MESSAGE
+    ---------------------- */
+
+    document.addEventListener("click", (e) => {
+
+      if (e.target.id === "sendMessage") {
+
+        const name = document.getElementById("name").value;
+
+        if (name === "") {
+          alert("Please enter your name");
+          return;
+        }
+
+        alert("Message sent to provider!");
+
+        document.getElementById("contactPopup").style.display = "none";
+
+      }
+
+    });
+
+    /* ----------------------
+    ADD REVIEW
+    ---------------------- */
+
+    const reviewContainer = document.querySelector(".reviews-container");
+
+    const reviewForm = document.createElement("div");
+
+    reviewForm.innerHTML = `
+
+<h3>Add Review</h3>
+
+<input type="text" id="reviewName" placeholder="Your Name">
+<select id="reviewRating">
+<option value="5">⭐ 5</option>
+<option value="4">⭐ 4</option>
+<option value="3">⭐ 3</option>
+<option value="2">⭐ 2</option>
+<option value="1">⭐ 1</option>
+</select>
+
+<textarea id="reviewText" placeholder="Write your review"></textarea>
+
+<button id="addReview">Submit Review</button>
+
+`;
+
+    reviewContainer.appendChild(reviewForm);
+
+    document.addEventListener("click", (e) => {
+
+      if (e.target.id === "addReview") {
+
+        const name = document.getElementById("reviewName").value;
+        const rating = document.getElementById("reviewRating").value;
+        const text = document.getElementById("reviewText").value;
+
+        if (name === "" || text === "") {
+          alert("Complete all fields");
+          return;
+        }
+
+        const review = document.createElement("div");
+        review.className = "review";
+
+        review.innerHTML = `
+
+<div class="review-header">
+<strong>${name}</strong>
+<span>⭐ ${rating}</span>
+</div>
+<p class="review-date">just now</p>
+<p>${text}</p>
+`;
+
+        reviewContainer.insertBefore(review, reviewContainer.children[1]);
+
+        document.getElementById("reviewName").value = "";
+        document.getElementById("reviewText").value = "";
+
+      }
+
+    });
+
+    /* ----------------------
+    CHECK IF OPEN NOW
+    ---------------------- */
+
+    function checkOpen() {
+
+      const now = new Date();
+      const hour = now.getHours();
+
+      const status = document.createElement("p");
+
+      if (hour >= 8 && hour < 18) {
+        status.innerHTML = "🟢 Open Now";
+        status.style.color = "green";
+      } else {
+        status.innerHTML = "🔴 Closed";
+        status.style.color = "red";
+      }
+
+      document.querySelector(".provider-info").appendChild(status);
+
+    }
+
+    checkOpen();
+
+    /* ----------------------
+    SAVE FAVORITE PROVIDER
+    ---------------------- */
+
+    const favBtn = document.createElement("button");
+    favBtn.innerText = "⭐ Save Provider";
+
+    favBtn.style.marginTop = "10px";
+
+    document.querySelector(".provider-info").appendChild(favBtn);
+
+    favBtn.onclick = () => {
+
+      localStorage.setItem("favoriteProvider", "Complete Engine Works");
+
+      alert("Provider saved!");
+
+    };
+
+  });
+
+</script>
+
 <body>
   <div class="container">
     <a class="back" href="view_all.html">← Back to Home</a>
@@ -120,4 +296,5 @@
     </div>
   </div>
 </body>
+
 </html>

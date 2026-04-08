@@ -8,6 +8,149 @@
     <title>Auto Services</title>
 </head>
 
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const searchInput = document.querySelector(".search-container input");
+        const categorySelect = document.querySelectorAll(".search-container select")[0];
+        const locationSelect = document.querySelectorAll(".search-container select")[1];
+        const sortSelect = document.querySelector(".filters select");
+
+        const cards = document.querySelectorAll(".service-card");
+        const countText = document.querySelector(".services-count");
+
+        /* ------------------------
+        FILTER FUNCTION
+        ------------------------ */
+
+        function filterServices() {
+
+            const searchValue = searchInput.value.toLowerCase();
+            const categoryValue = categorySelect.value.toLowerCase();
+            const locationValue = locationSelect.value.toLowerCase();
+
+            let visible = 0;
+
+            cards.forEach(card => {
+
+                const title = card.querySelector("h3").innerText.toLowerCase();
+                const category = card.querySelector(".category").innerText.toLowerCase();
+
+                /* SEARCH */
+                let show = true;
+
+                if (!title.includes(searchValue)) {
+                    show = false;
+                }
+
+                /* CATEGORY */
+
+                if (categoryValue !== "all categories" && !category.includes(categoryValue)) {
+                    show = false;
+                }
+
+                /* LOCATION (demo) */
+
+                if (locationValue !== "all locations") {
+                    /* aici ar fi verificare reala daca ai locatie pe card */
+                }
+
+                /* SHOW / HIDE */
+
+                if (show) {
+                    card.style.display = "block";
+                    visible++;
+                } else {
+                    card.style.display = "none";
+                }
+
+            });
+
+            countText.innerText = visible + " services found";
+
+        }
+
+        /* ------------------------
+        SORT FUNCTION
+        ------------------------ */
+
+        function sortServices() {
+
+            const grid = document.querySelector(".services-grid");
+            const cardsArray = Array.from(cards);
+
+            const type = sortSelect.value;
+
+            cardsArray.sort((a, b) => {
+
+                if (type === "Name (A-Z)") {
+                    return a.querySelector("h3").innerText.localeCompare(
+                        b.querySelector("h3").innerText
+                    );
+                }
+
+                if (type === "Price Low") {
+                    const pa = getPrice(a);
+                    const pb = getPrice(b);
+                    return pa - pb;
+                }
+
+                if (type === "Price High") {
+                    const pa = getPrice(a);
+                    const pb = getPrice(b);
+                    return pb - pa;
+                }
+
+            });
+
+            cardsArray.forEach(card => grid.appendChild(card));
+
+        }
+
+        function getPrice(card) {
+
+            const priceText = card.querySelector(".price").innerText;
+            const number = priceText.match(/\d+/);
+
+            return parseInt(number[0]);
+
+        }
+
+        /* ------------------------
+        EVENTS
+        ------------------------ */
+
+        searchInput.addEventListener("input", filterServices);
+        categorySelect.addEventListener("change", filterServices);
+        locationSelect.addEventListener("change", filterServices);
+        sortSelect.addEventListener("change", sortServices);
+
+
+        /* ------------------------
+        CARD ANIMATION
+        ------------------------ */
+
+        cards.forEach((card, i) => {
+
+            card.style.opacity = "0";
+            card.style.transform = "translateY(20px)";
+
+            setTimeout(() => {
+
+                card.style.transition = "0.4s";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+
+            }, i * 150);
+
+        });
+
+    });
+
+</script>
+
+
 <body>
     <div class="header_panel">
         <header class="top-header">
@@ -20,9 +163,9 @@
                 <input type="text" placeholder="Search services...">
                 <select>
                     <option>All Categories</option>
-                    <option>Oil Change</option>
-                    <option>AC Repair</option>
-                    <option>Battery</option>
+                    <option>Brake Service</option>
+                    <option>Air Conditioning</option>
+                    <option>Battery Service</option>
                 </select>
                 <select>
                     <option>All Locations</option>

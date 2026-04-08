@@ -31,6 +31,7 @@
     </style>
 </head>
 
+
 <body>
     <nav>
         <a href="public/registrate_service.html">Registrate</a>
@@ -113,5 +114,139 @@
     </div>
     <footer>© Godoroja Ştefan</footer>
 </body>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        /* -------------------------
+        AUTOCOMPLETE SERVICES
+        ------------------------- */
+
+        const services = [
+            "oil change",
+            "brake repair",
+            "engine diagnostic",
+            "battery replacement",
+            "ac recharge",
+            "transmission repair",
+            "wheel alignment",
+            "tire change"
+        ];
+
+        const input = document.getElementById("search_for_service");
+
+
+        input.addEventListener("input", () => {
+
+            list.innerHTML = "";
+
+            const value = input.value.toLowerCase();
+
+            if (value === "") return;
+
+            services.forEach(service => {
+
+                if (service.includes(value)) {
+
+                    const item = document.createElement("div");
+
+                    item.innerText = service;
+                    item.style.padding = "6px";
+                    item.style.cursor = "pointer";
+
+                    item.onclick = () => {
+
+                        input.value = service;
+                        list.innerHTML = "";
+
+                    };
+
+                    list.appendChild(item);
+
+                }
+
+            });
+
+        });
+
+
+        /* -------------------------
+        AUTO LOCATION
+        ------------------------- */
+
+        const locationInput = document.getElementById("location");
+
+        if (navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(pos => {
+
+                locationInput.value = "Your location";
+
+            });
+
+        }
+
+
+        /* -------------------------
+        SAVE RECENT SEARCH
+        ------------------------- */
+
+        const form = document.querySelector(".search-bar form");
+
+        form.addEventListener("submit", () => {
+
+            const search = input.value;
+
+            let history = JSON.parse(localStorage.getItem("recentSearch")) || [];
+
+            history.push(search);
+
+            localStorage.setItem("recentSearch", JSON.stringify(history));
+
+        });
+
+
+        /* -------------------------
+        DYNAMIC RATING
+        ------------------------- */
+
+        document.querySelectorAll(".rating").forEach(r => {
+
+            const number = parseFloat(r.querySelector("strong").innerText);
+
+            const percent = (number / 5) * 100;
+
+            const fill = r.querySelector(".stars-fill");
+
+            if (fill) {
+                fill.style.width = percent + "%";
+            }
+
+        });
+
+
+        /* -------------------------
+        SEARCH REDIRECT
+        ------------------------- */
+
+        form.addEventListener("submit", (e) => {
+
+            e.preventDefault();
+
+            const service = input.value;
+            const location = locationInput.value;
+
+            window.location.href =
+                "public/view_all.html?service=" +
+                encodeURIComponent(service) +
+                "&location=" +
+                encodeURIComponent(location);
+
+        });
+
+    });
+
+</script>
 
 </html>
