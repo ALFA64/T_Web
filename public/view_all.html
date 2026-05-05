@@ -1,69 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/view_style.css">
     <title>Auto Services</title>
 </head>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const searchInput = document.querySelector(".search-container input");
+        const categorySelect = document.querySelectorAll(".search-container select")[0];
+        const locationSelect = document.querySelectorAll(".search-container select")[1];
+        const sortSelect = document.querySelector(".filters select");
+
+        const cards = document.querySelectorAll(".service-card");
+        const countText = document.querySelector(".services-count");
+
+        /* ------------------------
+        FILTER FUNCTION
+        ------------------------ */
+
+        function filterServices() {
+
+            const searchValue = searchInput.value.toLowerCase();
+            const categoryValue = categorySelect.value.toLowerCase();
+            const locationValue = locationSelect.value.toLowerCase();
+
+            let visible = 0;
+
+            cards.forEach(card => {
+
+                const title = card.querySelector("h3").innerText.toLowerCase();
+                const category = card.querySelector(".category").innerText.toLowerCase();
+
+                /* SEARCH */
+                let show = true;
+
+                if (!title.includes(searchValue)) {
+                    show = false;
+                }
+
+                /* CATEGORY */
+
+                if (categoryValue !== "all categories" && !category.includes(categoryValue)) {
+                    show = false;
+                }
+
+                /* LOCATION (demo) */
+
+                if (locationValue !== "all locations") {
+                    /* aici ar fi verificare reala daca ai locatie pe card */
+                }
+
+                /* SHOW / HIDE */
+
+                if (show) {
+                    card.style.display = "block";
+                    visible++;
+                } else {
+                    card.style.display = "none";
+                }
+
+            });
+
+            countText.innerText = visible + " services found";
+
+        }
+
+        /* ------------------------
+        SORT FUNCTION
+        ------------------------ */
+
+        function sortServices() {
+
+            const grid = document.querySelector(".services-grid");
+            const cardsArray = Array.from(cards);
+
+            const type = sortSelect.value;
+
+            cardsArray.sort((a, b) => {
+
+                if (type === "Name (A-Z)") {
+                    return a.querySelector("h3").innerText.localeCompare(
+                        b.querySelector("h3").innerText
+                    );
+                }
+
+                if (type === "Price Low") {
+                    const pa = getPrice(a);
+                    const pb = getPrice(b);
+                    return pa - pb;
+                }
+
+                if (type === "Price High") {
+                    const pa = getPrice(a);
+                    const pb = getPrice(b);
+                    return pb - pa;
+                }
+
+            });
+
+            cardsArray.forEach(card => grid.appendChild(card));
+
+        }
+
+        function getPrice(card) {
+
+            const priceText = card.querySelector(".price").innerText;
+            const number = priceText.match(/\d+/);
+
+            return parseInt(number[0]);
+
+        }
+
+        /* ------------------------
+        EVENTS
+        ------------------------ */
+
+        searchInput.addEventListener("input", filterServices);
+        categorySelect.addEventListener("change", filterServices);
+        locationSelect.addEventListener("change", filterServices);
+        sortSelect.addEventListener("change", sortServices);
+
+
+        /* ------------------------
+        CARD ANIMATION
+        ------------------------ */
+
+        cards.forEach((card, i) => {
+
+            card.style.opacity = "0";
+            card.style.transform = "translateY(20px)";
+
+            setTimeout(() => {
+
+                card.style.transition = "0.4s";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+
+            }, i * 150);
+
+        });
+
+    });
+
+</script>
+
+
 <body>
-    <nav>
-        <a href="index.html">Back to Home</a>
-    </nav>
-    <header>
-        <h1>Auto Services</h1>
-        <p>10 services found</p>
-        <div class="search-bar">
-            <form action="/search.php">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAChUlEQVR4nO2Zu24TQRSGPxeElgYbEVKYPAIFEC6vgAQO8gUJER4AiYuIkBLogBdAooIUSBGiIDFKHQINl7wBDS2kCiIhsYPRkf6VpjCIxTNj77KfNNLK3v3/Pes9Z86MoaBgJDkEzAALwDqwAexqfAU+6rsrQIUR5CzQBjpA7y+HnbsMnGEEmARWnJvrAq+B68BxoAzs07DjE8ANYE3nJte9Ao4OK4gW8E038h24DxxMcb0F9gDYksYm0CAy887TXATGB9A6Ajx39OaIxD0Z/tRxyZPuNWAvVjAtGZlhLYD+tBNMnYCJneTE7VAmwKyTM9UQBitOToSk5ORMO8Q80VOFmSA846qEPeC0T+G2RK3ExsJKs3ku+Ww7OprA0swTg2LzTFftjR0PzFU9mVXi80bel32ILUjM2o7Y3JT3Ex9i6xKz3ik2U/J+70NsQ2Ix8yOhIu8vPsR2JDZGfPbL+0deAtnMy6v1yWey26IoNqfkbWU4F+X3sQ+xGYnZ8jQ2b+V93td7mrQoXlqFlC1KBzjgS3RZT8YauVg8lKe19N44KdHtIbTxx3yLt50n5Gud3g/TfiGvlyEMqpqYelqOhuKOPGxn8nAok4az+WAbBb656Gw+nCMwc04ws55es5J+iSSIPe3YECuYJGdsk+1fmXBywh1WeptEoO7kzJZKc5p5pqwSu+00ht0+wTSIQNWpZonxmlqLKU2mYxoVfXZLvZN704tK7OYwg0FbNksp/1aw5cGzPs3o74KpE5GyNgqeAh9UQnc0uX0G3gGPdFN/WhY0RiEYX1h57/QJ5hI5CqZFBpnOUzC1/yGYJhkNZrcIJiMFYJ6McsH5Ze6ScWox/84uKAB+ATiuEwljmLOIAAAAAElFTkSuQmCC" alt="search--v1" 
-                style="width: 30px; height:30px;">
-                <input type="search" id="search_for_service" class="search_for_service" placeholder="Search for service (e.g, oil change, brake repair, ... )">
-                <select name="car_category" id="car_category">
-                    <option value="motorcycles">Motorcycles</option>
-                    <option value="car">Car</option>
-                    <option value="truck">Truck</option>
-                    <option value="minibus">Minibus</option>
-                    <option value="tractor">Tractor</option>
-                    <option value="special">Special Transport</option>
-                    <option value="other">Other</option>
-                </select>
-                <select name="location" id="location">
-                    <option value="chisinau">Chisinau</option>
-                    <option value="orhei">Orhei</option>
-                    <option value="balti">Balti</option>
-                </select>
-            </form>
-            <button type="submit">Search</button>
-        </div>
-    </header>
-
-    <div class="filters">
-        <form action="/search_filter.php">
-            <img src="" alt="filter_icon">
-            <h2>Filters</h2>
-            <p>Sort By</p>
-            <select name="sort_by" id="sort_by">
-                <option value="asc">Price (LOW to HIGH)</option>
-                <option value="desc">Price (HIGH to LOW)</option>
-                <option value="popular">Popular</option>
-                <option value="by_reviews">By reviews</option>
-            </select>
-            <input type="range" min="1" max="10000" value="100" class="price" id="price">
-        </form>
-    </div>
-
-    <div class="result">
-        <section class="services">
-            <img src="" alt="describe_service">
-            <strong><img alt="location_icon"> New York, NY </strong>
-            <h3>AC Recharge</h3>
-            <p>Air conditioning refrigerant recharge and system check</p><br>
-            <div class="time-price">
-                <p>45 min - 1 hour</p>
-                <strong>$30 - $80</strong>
+    <div class="header_panel">
+        <header class="top-header">
+            <div class="header-top">
+                <h1>Auto Services</h1>
+                <a class="home-btn" href="../index.html">Back to Home</a>
             </div>
-            <button type="button"><a href="about.html">View Details</a></button>
+            <p class="services-count">10 services found</p>
+            <div class="search-container">
+                <input type="text" placeholder="Search services...">
+                <select>
+                    <option>All Categories</option>
+                    <option>Brake Service</option>
+                    <option>Air Conditioning</option>
+                    <option>Battery Service</option>
+                </select>
+                <select>
+                    <option>All Locations</option>
+                    <option>Chisinau</option>
+                    <option>Balti</option>
+                    <option>Orhei</option>
+                </select>
+            </div>
+        </header>
+    </div>
+    <div class="main-layout">
+        <!-- FILTERS -->
+        <aside class="filters">
+            <div class="filter-title">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAbUlEQVR4nO2VQQqAIBBF3xk6k0Fd2zlHmzpIEbhyJaOixX8wGxfzQPjzQYjJWYEDuIDds8CAu3LOtGvJ3m2UONKBkL76lW49BOJ/hNp8lmKOmJSOjRJHzylUPsV3+rdFLZbGzEaJIw1Q/4p5eQAvqY4zZ0K93gAAAABJRU5ErkJggg=="
+                    alt="filters">
+                <h3>Filters</h3>
+            </div>
+            <label>Sort By</label>
+            <select>
+                <option>Name (A-Z)</option>
+                <option>Price Low</option>
+                <option>Price High</option>
+            </select>
+            <label>Price Range</label>
+            <p>Average: $131</p>
+        </aside>
+        <!-- SERVICES -->
+        <section class="services-grid">
+            <article class="service-card">
+                <img src="../img/ac_recharge_photo.jpeg">
+                <div class="card-content">
+                    <span class="category">Brake Service</span>
+                    <h3>Brake Pad Replacement</h3>
+                    <p>Front or rear brake pad replacement with rotor inspection</p>
+                    <div class="card-footer">
+                        <div class="service-info">
+                            <span>1-2 hours</span>
+                            <span class="price">$150 - $400</span>
+                        </div>
+                        <a href="about.html" class="details-btn">View Details</a>
+                    </div>
+                </div>
+            </article>
+            <article class="service-card">
+                <img src="../img/ac_recharge_photo.jpeg">
+                <div class="card-content">
+                    <span class="category">Air Conditioning</span>
+                    <h3>AC Recharge</h3>
+                    <p>Air conditioning refrigerant recharge and system check</p>
+                    <div class="card-footer">
+                        <div class="service-info">
+                            <span>45 min - 1 hour</span>
+                            <span class="price">$100 - $250</span>
+                        </div>
+                        <a href="about.html" class="details-btn">View Details</a>
+                    </div>
+                </div>
+            </article>
+            <article class="service-card">
+                <img src="../img/ac_recharge_photo.jpeg">
+                <div class="card-content">
+                    <span class="category">Battery Service</span>
+                    <h3>Battery Replacement</h3>
+                    <p>Car battery replacement with installation and disposal</p>
+                    <div class="card-footer">
+                        <div class="service-info">
+                            <span>30 min</span>
+                            <span class="price">$120 - $300</span>
+                        </div>
+                        <a href="about.html" class="details-btn">View Details</a>
+                    </div>
+                </div>
+            </article>
         </section>
     </div>
-    <footer>© Godoroja Ştefan</footer>
 </body>
+
 </html>
